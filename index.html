@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiquidVest - Unlocking Liquidity for Time-Locked DeFi Assets</title>
+    <style>
+        /* Base Styles & Variables */
+        :root {
+            --primary: #0070f3;
+            --primary-dark: #005cc8;
+            --secondary: #00c8ff;
+            --dark: #050e1a;
+            --darker: #020812;
+            --accent: #8a3ffc;
+            --text: #e1e9f8;
+            --text-secondary: #a0b3d9;
+            --success: #0ac285;
+            --font-main: 'Montserrat', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 25% 10%, rgba(0, 112, 243, 0.12) 0%, transparent 30%),
+                radial-gradient(circle at 75% 75%, rgba(138, 63, 252, 0.1) 0%, transparent 30%);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--text) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+        
+        h3 {
+            font-size: 1.75rem;
+            color: var(--secondary);
+            margin-top: 2rem;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(2, 8, 18, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            padding: 0 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon::before {
+            content: '';
+            width: 15px;
+            height: 15px;
+            background: var(--darker);
+            border-radius: 50%;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        nav a:hover {
+            color: var(--secondary);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0, 112, 243, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 112, 243, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-tagline {
+            font-family: var(--font-mono);
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 200, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .hero p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.25rem;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .secondary-button {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .secondary-button:hover {
+            background: rgba(0, 112, 243, 0.1);
+        }
+        
+        .hero-visual {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            height: 500px;
+            z-index: 1;
+        }
+
+        /* Liquid Animation Canvas */
+        #liquidCanvas {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Features Section */
+        .features {
+            background-color: var(--dark);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(5, 14, 26, 0.5);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(0, 200, 255, 0.05) 100%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: rgba(0, 200, 255, 0.2);
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+        
+        .feature-card p {
+            color: var(--text-secondary);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            position: relative;
+        }
+        
+        .steps {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .step-number {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--primary);
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 112, 243, 0.1);
+            border-radius: 50%;
+        }
+        
+        .step-content h3 {
+            margin-top: 0;
+        }
+        
+        .step-content p {
+            color: var(--text-secondary);
+        }
+        
+        .step-connector {
+            position: absolute;
+            top: 60px;
+            left: 30px;
+            width: 2px;
+            height: calc(100% - 30px);
+            background: linear-gradient(to bottom, var(--primary) 0%, transparent 100%);
+        }
+
+        /* Compatible Ecosystems Section */
+        .ecosystems {
+            background-color: var(--dark);
+            padding: 5rem 0;
+        }
+        
+        .ecosystem-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .logo-item {
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-item:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .logo-item span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            position: relative;
+        }
+        
+        .logo-item span::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        /* CTA Section */
+        .cta {
+            position: relative;
+            background: linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(138, 63, 252, 0.1) 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+        
+        .cta-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .cta-content {
+            max-width: 500px;
+        }
+        
+        .cta-visual {
+            width: 300px;
+            height: 300px;
+            position: relative;
+        }
+        
+        .cta h2 {
+            margin-bottom: 1rem;
+        }
+        
+        .cta p {
+            margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--darker);
+            padding: 3rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-logo span {
+            color: var(--secondary);
+        }
+        
+        .footer-about p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero-visual {
+                width: 40%;
+            }
+            
+            .cta-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+            }
+            
+            .cta-visual {
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .header-container {
+                height: 70px;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .hero-visual {
+                display: none;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+                text-align: center;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .step {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .step-connector {
+                display: none;
+            }
+        }
+        
+        /* Floating Elements Animation */
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(0, 200, 255, 0.5) 0%, rgba(0, 112, 243, 0) 70%);
+            animation: float 10s infinite ease-in-out;
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(10px, 15px);
+            }
+            50% {
+                transform: translate(-5px, 10px);
+            }
+            75% {
+                transform: translate(-10px, -5px);
+            }
+        }
+        
+        /* Token Glow Effect */
+        .token-glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(0, 112, 243, 0.2) 0%, rgba(0, 200, 255, 0) 70%);
+            animation: pulse 4s infinite ease-in-out;
+            z-index: -1;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+        
+        /* Liquid Drops Animation */
+        .liquid-drop {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, var(--secondary) 0%, var(--primary) 100%);
+            filter: blur(5px);
+            opacity: 0;
+            animation: dropFall 5s infinite ease-in;
+        }
+        
+        @keyframes dropFall {
+            0% {
+                transform: translateY(-50px) scale(0.3);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(120vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Code Cards */
+        .code-card {
+            background: rgba(2, 8, 18, 0.9);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(0, 112, 243, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .code-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+        
+        .code-comment {
+            color: #63718b;
+        }
+        
+        .code-function {
+            color: var(--secondary);
+        }
+        
+        .code-keyword {
+            color: #c678dd;
+        }
+        
+        .code-string {
+            color: #98c379;
+        }
+        
+        .code-number {
+            color: #d19a66;
+        }
+
+        /* Liquid Water Dashboard Mockup */
+        .dashboard-mockup {
+            background: rgba(5, 14, 26, 0.8);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            margin: 3rem 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .mockup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .mockup-title {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .mockup-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .control-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .control-dot:nth-child(1) {
+            background: #ff5f57;
+        }
+        
+        .control-dot:nth-child(2) {
+            background: #febc2e;
+        }
+        
+        .control-dot:nth-child(3) {
+            background: #28c840;
+        }
+        
+        .mockup-content {
+            padding: 1rem 0;
+        }
+        
+        .mockup-data {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .data-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .data-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .data-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        
+        .data-change {
+            font-size: 0.8rem;
+            color: var(--success);
+            margin-top: 0.5rem;
+        }
+        
+        .mockup-chart {
+            height: 200px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(180deg, rgba(0, 200, 255, 0.2) 0%, rgba(0, 112, 243, 0) 100%);
+            clip-path: polygon(0% 100%, 5% 80%, 10% 85%, 15% 75%, 20% 80%, 25% 70%, 30% 75%, 35% 65%, 40% 70%, 45% 60%, 50% 65%, 55% 55%, 60% 60%, 65% 50%, 70% 55%, 75% 45%, 80% 50%, 85% 40%, 90% 45%, 95% 35%, 100% 40%, 100% 100%);
+        }
+        
+        .chart-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            clip-path: polygon(0% 0%, 5% 80%, 10% 85%, 15% 75%, 20% 80%, 25% 70%, 30% 75%, 35% 65%, 40% 70%, 45% 60%, 50% 65%, 55% 55%, 60% 60%, 65% 50%, 70% 55%, 75% 45%, 80% 50%, 85% 40%, 90% 45%, 95% 35%, 100% 40%);
+        }
+
+        /* Water ripple effect */
+        .ripple-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .ripple {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            transform: scale(0);
+            opacity: 0.7;
+            animation: ripple 3s linear infinite;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(20);
+                opacity: 0;
+            }
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <div class="logo-icon"></div>
+                Liquid<span>Vest</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#ecosystems">Ecosystems</a></li>
+                    <li><a href="#" class="cta-button">Launch App</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <canvas id="liquidCanvas"></canvas>
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-tagline">Unlock Liquidity For vNFTs</span>
+                <h1>Unlock the Power of Your Time-Locked DeFi Assets</h1>
+                <p>LiquidVest creates a circular economy that benefits both vNFT holders seeking liquidity and traders seeking flexible exposure while maintaining governance rewards.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="cta-button">Get Started</a>
+                    <a href="#how-it-works" class="secondary-button">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <!-- Liquid animations will be rendered here by JavaScript -->
+            </div>
+        </div>
+        <div class="floating-circle" style="width: 300px; height: 300px; top: 20%; left: 10%; animation-duration: 15s;"></div>
+        <div class="floating-circle" style="width: 200px; height: 200px; top: 60%; right: 5%; animation-duration: 12s; animation-delay: 2s;"></div>
+        <div class="token-glow" style="top: 30%; right: 15%;"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Innovative DeFi Liquidity Solutions</h2>
+                <p>LiquidVest solves the fundamental tension between locking for rewards and maintaining liquidity</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-plug"></i></div>
+                    <h3>Multi-Protocol Support</h3>
+                    <p>Compatible with all Solidly-based protocols including Thena, Aerodrome, Curve, Pendle and other Solidly forks.</p>
+                </div>
+            </div>
+        </div>
+        <div class="floating-circle" style="width: 150px; height: 150px; bottom: 10%; left: 20%; animation-duration: 10s;"></div>
+        <div class="floating-circle" style="width: 100px; height: 100px; top: 20%; right: 15%; animation-duration: 8s; animation-delay: 1s;"></div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How LiquidVest Works</h2>
+                <p>Our innovative protocol creates liquidity through a simple, user-friendly process</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <h3>Deposit Your vNFT</h3>
+                        <p>Connect your wallet and deposit your time-locked vesting NFT (such as veTHENA) into the LiquidVest platform.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <h3>Receive Liquid Tokens</h3>
+                        <p>Instantly receive liquid wrapper tokens (e.g., liVeTHENA) representing your underlying tokens, minus a small premium based on remaining lock time.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-connector"></div>
+                    <div class="step-content">
+                        <h3>Trade or Stake</h3>
+                        <p>Use your liquid tokens freely in the DeFi ecosystem - trade them on DEXs or stake them to earn a share of voting rewards.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Claim Rewards</h3>
+                        <p>Stake your liquid tokens to receive voting rewards generated by the community vNFT pool, distributed automatically to all stakers.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-mockup">
+                <div class="mockup-header">
+                    <div class="mockup-title">LiquidVest Dashboard</div>
+                    <div class="mockup-controls">
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                        <div class="control-dot"></div>
+                    </div>
+                </div>
+                <div class="mockup-content">
+                    <div class="mockup-data">
+                        <div class="data-card">
+                            <div class="data-label">Total Locked Value</div>
+                            <div class="data-value">$12.4M</div>
+                            <div class="data-change">+5.2% this week</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">Avg. Liquidity Premium</div>
+                            <div class="data-value">4.8%</div>
+                            <div class="data-change">-0.3% this week</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">Active vNFTs</div>
+                            <div class="data-value">892</div>
+                            <div class="data-change">+21 this week</div>
+                        </div>
+                    </div>
+                    <div class="mockup-chart">
+                        <div class="chart-line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="floating-circle" style="width: 200px; height: 200px; bottom: 30%; right: 10%; animation-duration: 12s;"></div>
+        <div class="token-glow" style="bottom: 20%; left: 15%;"></div>
+    </section>
+
+    <!-- Compatible Ecosystems Section -->
+    <section class="ecosystems" id="ecosystems">
+        <div class="container">
+            <div class="section-header">
+                <h2>Compatible Ecosystems</h2>
+                <p>LiquidVest works seamlessly with all Solidly-based protocols</p>
+            </div>
+            <div class="ecosystem-logos">
+                <div class="logo-item"><span>THENA</span></div>
+                <div class="logo-item"><span>AERODROME</span></div>
+                <div class="logo-item"><span>CURVE</span></div>
+                <div class="logo-item"><span>PENDLE</span></div>
+                <div class="logo-item"><span>VELODROME</span></div>
+            </div>
+            
+            <div class="code-card">
+                <div class="code-comment">// Example of liquidifying a vNFT</div>
+                <div class="code-function">async function</div> <span class="code-keyword">liquidifyVNFT</span>(vNFT, account) {
+                <br>&nbsp;&nbsp;<span class="code-comment">// Approve the vNFT for transfer</span>
+                <br>&nbsp;&nbsp;<span class="code-keyword">await</span> vNFT.approve(LIQUIDVEST_ADDRESS, tokenId);
+                <br>
+                <br>&nbsp;&nbsp;<span class="code-comment">// Calculate the premium based on lock time</span>
+                <br>&nbsp;&nbsp;<span class="code-keyword">const</span> lockTimeRemaining = <span class="code-keyword">await</span> vNFT.getLockTimeRemaining(tokenId);
+                <br>&nbsp;&nbsp;<span class="code-keyword">const</span> premium = calculatePremium(lockTimeRemaining);
+                <br>
+                <br>&nbsp;&nbsp;<span class="code-comment">// Deposit the vNFT and receive liquid tokens</span>
+                <br>&nbsp;&nbsp;<span class="code-keyword">const</span> liquidTokens = <span class="code-keyword">await</span> liquidVest.deposit(tokenId, premium);
+                <br>&nbsp;&nbsp;<span class="code-function">return</span> liquidTokens;
+                <br>}
+            </div>
+        </div>
+        <div class="floating-circle" style="width: 120px; height: 120px; top: 30%; left: 15%; animation-duration: 9s;"></div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-container">
+                <div class="cta-content">
+                    <h2>Ready to Unlock Your Liquidity?</h2>
+                    <p>Join the LiquidVest protocol and transform your time-locked DeFi assets into liquid capital while maintaining governance rights and rewards.</p>
+                    <a href="#" class="cta-button">Launch App</a>
+                </div>
+                <div class="cta-visual">
+                    <div class="token-glow" style="width: 250px; height: 250px;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="ripple-container">
+            <div class="ripple" style="bottom: 10%; left: 20%;"></div>
+            <div class="ripple" style="bottom: 30%; left: 60%; animation-delay: 1s;"></div>
+            <div class="ripple" style="bottom: 20%; left: 80%; animation-delay: 2s;"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <div class="logo-icon"></div>
+                        Liquid<span>Vest</span>
+                    </div>
+                    <p>A decentralized protocol designed to provide liquidity for time-locked vesting NFTs in Solidly-based DeFi ecosystems.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Protocol</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Whitepaper</a></li>
+                        <li><a href="#">Governance</a></li>
+                        <li><a href="#">Audits</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#">Forum</a></li>
+                        <li><a href="#">Discord</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Partners</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LiquidVest Protocol. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Liquid canvas animation
+        const canvas = document.getElementById('liquidCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas dimensions
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Liquid drops
+        class Drop {
+            constructor() {
+                this.reset();
+            }
+            
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = -50;
+                this.size = Math.random() * 20 + 10;
+                this.speed = Math.random() * 2 + 2;
+                this.opacity = Math.random() * 0.7 + 0.3;
+                this.hue = Math.random() * 40 + 200; // Blue to cyan range
+            }
+            
+            update() {
+                this.y += this.speed;
+                this.opacity -= 0.002;
+                
+                if (this.y > canvas.height || this.opacity <= 0) {
+                    this.reset();
+                }
+            }
+            
+            draw() {
+                ctx.beginPath();
+                // Create gradient for drop
+                const gradient = ctx.createRadialGradient(
+                    this.x, this.y, 0,
+                    this.x, this.y, this.size
+                );
+                gradient.addColorStop(0, `hsla(${this.hue}, 100%, 70%, ${this.opacity})`);
+                gradient.addColorStop(1, `hsla(${this.hue}, 100%, 50%, 0)`);
+                
+                ctx.fillStyle = gradient;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        // Create drops
+        const drops = [];
+        const dropCount = 20;
+        
+        for (let i = 0; i < dropCount; i++) {
+            drops.push(new Drop());
+        }
+        
+        // Floating particles
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.hue = Math.random() * 40 + 200; // Blue to cyan range
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                // Wrap around edges
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = `hsla(${this.hue}, 100%, 70%, ${this.opacity})`;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        // Create particles
+        const particles = [];
+        const particleCount = 150;
+        
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+        
+        // Draw water wave
+        function drawWave(time) {
+            ctx.beginPath();
+            
+            const height = 50;
+            const amplitude = 20;
+            const frequency = 0.02;
+            const y = canvas.height - height;
+            
+            ctx.moveTo(0, y + Math.sin(time * 0.001) * amplitude);
+            
+            for (let x = 0; x < canvas.width; x++) {
+                const wave1 = Math.sin(x * frequency + time * 0.001) * amplitude;
+                const wave2 = Math.sin(x * frequency * 2 + time * 0.002) * amplitude / 2;
+                ctx.lineTo(x, y + wave1 + wave2);
+            }
+            
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.lineTo(0, canvas.height);
+            ctx.closePath();
+            
+            const gradient = ctx.createLinearGradient(0, y, 0, canvas.height);
+            gradient.addColorStop(0, 'rgba(0, 112, 243, 0.2)');
+            gradient.addColorStop(1, 'rgba(0, 200, 255, 0.05)');
+            
+            ctx.fillStyle = gradient;
+            ctx.fill();
+        }
+        
+        // Animation loop
+        function animate() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw particles
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            
+            // Draw drops
+            drops.forEach(drop => {
+                drop.update();
+                drop.draw();
+            });
+            
+            // Draw wave
+            drawWave(performance.now());
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+
+        // Add liquid drops randomly
+        function addRandomDrops() {
+            const numDrops = Math.floor(Math.random() * 3) + 1;
+            
+            for (let i = 0; i < numDrops; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('liquid-drop');
+                
+                // Random position
+                const posX = Math.random() * 80 + 10; // 10% to 90% of window width
+                drop.style.left = `${posX}%`;
+                
+                // Random delay
+                const delay = Math.random() * 2;
+                drop.style.animationDelay = `${delay}s`;
+                
+                document.body.appendChild(drop);
+                
+                // Remove after animation completes
+                setTimeout(() => {
+                    document.body.removeChild(drop);
+                }, 5000);
+            }
+            
+            // Schedule next drops
+            setTimeout(addRandomDrops, Math.random() * 2000 + 1000);
+        }
+        
+        // Start liquid drops animation
+        addRandomDrops();
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html><div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3>Enhanced Yield</h3>
+                    <p>Benefit from the accumulated governance rewards while maintaining trading flexibility and market exposure.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-exchange-alt"></i></div>
+                    <h3>Flexible Trading</h3>
+                    <p>Enter and exit positions without being constrained by vesting periods, improving capital efficiency in DeFi markets.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-vote-yea"></i></div>
+                    <h3>Governance Rights</h3>
+                    <p>Maintain access to governance voting power through our community pool, ensuring your voice is still heard.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+                    <h3>Circular Economy</h3>
+                    <p>Our self-sustaining model creates aligned incentives for all participants while maintaining ecosystem stability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-lock-open"></i></div>
+                    <h3>Immediate Liquidity</h3>
+                    <p>Transform your time-locked vNFTs into liquid assets instantly, without sacrificing rewards or governance rights.</p>
+                </div>
+                <div class="feature-card">
