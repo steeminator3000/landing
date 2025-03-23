@@ -159,6 +159,7 @@ nav a:hover::after {
     align-items: center;
     padding-top: 80px;
     position: relative;
+    overflow: hidden; /* Ensure overflow is hidden to prevent content spillage */
 }
 
 .hero-content {

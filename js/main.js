@@ -144,39 +144,44 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Initialize liquid drops animation
-    function initializeLiquidDrops() {
-        function addRandomDrops() {
-            const numDrops = Math.floor(Math.random() * 3) + 1;
+function initializeLiquidDrops() {
+    // Find the hero section to contain drops
+    const heroSection = document.querySelector('.hero');
+    if (!heroSection) return;
+    
+    function addRandomDrops() {
+        const numDrops = Math.floor(Math.random() * 3) + 1;
+        
+        for (let i = 0; i < numDrops; i++) {
+            const drop = document.createElement('div');
+            drop.classList.add('liquid-drop');
             
-            for (let i = 0; i < numDrops; i++) {
-                const drop = document.createElement('div');
-                drop.classList.add('liquid-drop');
-                
-                // Random position
-                const posX = Math.random() * 80 + 10; // 10% to 90% of window width
-                drop.style.left = `${posX}%`;
-                
-                // Random delay
-                const delay = Math.random() * 2;
-                drop.style.animationDelay = `${delay}s`;
-                
-                document.body.appendChild(drop);
-                
-                // Remove after animation completes
-                setTimeout(() => {
-                    if (document.body.contains(drop)) {
-                        document.body.removeChild(drop);
-                    }
-                }, 5000);
-            }
+            // Random position within the hero section
+            const posX = Math.random() * 80 + 10; // 10% to 90% of section width
+            drop.style.left = `${posX}%`;
             
-            // Schedule next drops
-            setTimeout(addRandomDrops, Math.random() * 2000 + 1000);
+            // Random delay
+            const delay = Math.random() * 2;
+            drop.style.animationDelay = `${delay}s`;
+            
+            // Append to hero section instead of body
+            heroSection.appendChild(drop);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                if (heroSection.contains(drop)) {
+                    heroSection.removeChild(drop);
+                }
+            }, 5000);
         }
         
-        // Start liquid drops animation
-        addRandomDrops();
+        // Schedule next drops
+        setTimeout(addRandomDrops, Math.random() * 2000 + 1000);
     }
+    
+    // Start liquid drops animation
+    addRandomDrops();
+}
     
     // Initialize all page functionality
     function initializeAll() {

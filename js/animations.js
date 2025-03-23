@@ -17,14 +17,18 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const ctx = canvas.getContext('2d');
         
-        // Set canvas dimensions
+        // Set canvas dimensions to match the hero section
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const heroSection = canvas.closest('.hero');
+            if (heroSection) {
+                canvas.width = heroSection.offsetWidth;
+                canvas.height = heroSection.offsetHeight;
+                
+                // Force redraw all elements after resize to prevent visual glitches
+                initParticles();
+                initDrops();
+            }
         }
-        
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
         
         // Liquid drops class
         class Drop {
@@ -34,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             reset() {
                 this.x = Math.random() * canvas.width;
-                this.y = -50;
+                this.y = -50; // Start above the visible canvas
                 this.size = Math.random() * 20 + 10;
                 this.speed = Math.random() * 2 + 2;
                 this.opacity = Math.random() * 0.7 + 0.3;
@@ -45,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.y += this.speed;
                 this.opacity -= 0.002;
                 
+                // Reset if drop goes beyond canvas height or becomes invisible
                 if (this.y > canvas.height || this.opacity <= 0) {
                     this.reset();
                 }
@@ -67,11 +72,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Create drops
-        const drops = [];
+        let drops = [];
         const dropCount = 20;
         
-        for (let i = 0; i < dropCount; i++) {
-            drops.push(new Drop());
+        function initDrops() {
+            drops = [];
+            for (let i = 0; i < dropCount; i++) {
+                drops.push(new Drop());
+            }
         }
         
         // Floating particles class
@@ -81,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             reset() {
+                // Ensure particles stay within the canvas bounds
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 3 + 1;
@@ -94,11 +103,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.x += this.speedX;
                 this.y += this.speedY;
                 
-                // Wrap around edges
-                if (this.x < 0) this.x = canvas.width;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.y < 0) this.y = canvas.height;
-                if (this.y > canvas.height) this.y = 0;
+                // Keep particles within canvas boundaries by bouncing them off edges
+                // instead of wrapping around
+                if (this.x < 0 || this.x > canvas.width) {
+                    this.speedX *= -1; // Reverse direction
+                    this.x = Math.max(0, Math.min(this.x, canvas.width));
+                }
+                if (this.y < 0 || this.y > canvas.height) {
+                    this.speedY *= -1; // Reverse direction
+                    this.y = Math.max(0, Math.min(this.y, canvas.height));
+                }
             }
             
             draw() {
@@ -110,11 +124,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Create particles
-        const particles = [];
+        let particles = [];
         const particleCount = 150;
         
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
         }
         
         // Draw water wave
@@ -145,6 +162,16 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.fillStyle = gradient;
             ctx.fill();
         }
+        
+        // Set initial size
+        resizeCanvas();
+        
+        // Create initial particles and drops
+        initParticles();
+        initDrops();
+        
+        // Listen for window resize
+        window.addEventListener('resize', resizeCanvas);
         
         // Animation loop
         function animate() {
