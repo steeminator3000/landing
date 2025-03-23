@@ -3,7 +3,7 @@
     <div class="container">
         <div class="section-header fade-in">
             <h2>Compatible Ecosystems</h2>
-            <p>LiquidVest works seamlessly with all Solidly-based protocols</p>
+            <p>Liquidao works seamlessly with all Solidly-based protocols</p>
         </div>
         <div class="ecosystem-logos stagger-fade-in">
             <div class="logo-item"><span>THENA</span></div>
@@ -17,14 +17,14 @@
             <div class="code-comment">// Example of liquidifying a vNFT</div>
             <div class="code-function">async function</div> <span class="code-keyword">liquidifyVNFT</span>(vNFT, account) {
             <br>&nbsp;&nbsp;<span class="code-comment">// Approve the vNFT for transfer</span>
-            <br>&nbsp;&nbsp;<span class="code-keyword">await</span> vNFT.approve(LIQUIDVEST_ADDRESS, tokenId);
+            <br>&nbsp;&nbsp;<span class="code-keyword">await</span> vNFT.approve(LIQUIDAO_ADDRESS, tokenId);
             <br>
             <br>&nbsp;&nbsp;<span class="code-comment">// Calculate the premium based on lock time</span>
             <br>&nbsp;&nbsp;<span class="code-keyword">const</span> lockTimeRemaining = <span class="code-keyword">await</span> vNFT.getLockTimeRemaining(tokenId);
             <br>&nbsp;&nbsp;<span class="code-keyword">const</span> premium = calculatePremium(lockTimeRemaining);
             <br>
             <br>&nbsp;&nbsp;<span class="code-comment">// Deposit the vNFT and receive liquid tokens</span>
-            <br>&nbsp;&nbsp;<span class="code-keyword">const</span> liquidTokens = <span class="code-keyword">await</span> liquidVest.deposit(tokenId, premium);
+            <br>&nbsp;&nbsp;<span class="code-keyword">const</span> liquidTokens = <span class="code-keyword">await</span> Liquidao.deposit(tokenId, premium);
             <br>&nbsp;&nbsp;<span class="code-function">return</span> liquidTokens;
             <br>}
         </div>
