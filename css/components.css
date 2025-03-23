@@ -67,6 +67,14 @@ nav ul {
     list-style: none;
     gap: var(--space-6);
     margin-bottom: 0;
+    align-items: center; /* Add this to vertically center items */
+    height: 100%; /* Ensure the ul takes full height of the nav */
+}
+
+nav li {
+    display: flex; /* Add this to ensure li items can be aligned */
+    align-items: center; /* Vertically center content inside li */
+    height: 100%; /* Make list items take full height */
 }
 
 nav a {
@@ -76,25 +84,16 @@ nav a {
     transition: all var(--transition-normal);
     position: relative;
     padding: var(--space-2) 0;
+    display: flex; /* Add this to allow vertical centering */
+    align-items: center; /* Vertically center the text */
 }
 
-nav a:hover {
-    color: var(--secondary);
-}
-
-nav a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background: var(--gradient-secondary);
-    transition: width var(--transition-normal);
-}
-
-nav a:hover::after {
-    width: 100%;
+/* Adjust button within navigation to maintain alignment */
+nav .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3) var(--space-5);
 }
 
 /* Mobile navigation toggle */
