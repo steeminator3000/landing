@@ -5,37 +5,2182 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liquidao - Unlocking Liquidity for Time-Locked DeFi Assets</title>
     
-    <!-- CSS Imports -->
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/layout.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    
     <!-- External Fonts and Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Variables CSS */
+        :root {
+            /* Color Palette */
+            --primary: #0070f3;
+            --primary-dark: #005cc8;
+            --secondary: #00c8ff;
+            --dark: #050e1a;
+            --darker: #020812;
+            --accent: #8a3ffc;
+            --text: #e1e9f8;
+            --text-secondary: #a0b3d9;
+            --success: #0ac285;
+            --warning: #f7b955;
+            --error: #ff5757;
+            
+            /* Typography */
+            --font-main: 'Montserrat', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-size-xs: 0.75rem;   /* 12px */
+            --font-size-sm: 0.875rem;  /* 14px */
+            --font-size-base: 1rem;    /* 16px */
+            --font-size-md: 1.125rem;  /* 18px */
+            --font-size-lg: 1.25rem;   /* 20px */
+            --font-size-xl: 1.5rem;    /* 24px */
+            --font-size-2xl: 1.875rem; /* 30px */
+            --font-size-3xl: 2.25rem;  /* 36px */
+            --font-size-4xl: 3rem;     /* 48px */
+            --font-size-5xl: 3.75rem;  /* 60px */
+            
+            /* Spacing */
+            --space-1: 0.25rem;  /* 4px */
+            --space-2: 0.5rem;   /* 8px */
+            --space-3: 0.75rem;  /* 12px */
+            --space-4: 1rem;     /* 16px */
+            --space-5: 1.5rem;   /* 24px */
+            --space-6: 2rem;     /* 32px */
+            --space-8: 3rem;     /* 48px */
+            --space-10: 4rem;    /* 64px */
+            --space-12: 5rem;    /* 80px */
+            --space-16: 8rem;    /* 128px */
+            
+            /* Layout */
+            --container-max-width: 1200px;
+            --container-padding: 2rem;
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 30px;
+            --border-radius-full: 9999px;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+            
+            /* Z-index levels */
+            --z-negative: -1;
+            --z-default: 1;
+            --z-dropdown: 1000;
+            --z-sticky: 1100;
+            --z-fixed: 1200;
+            --z-modal: 1300;
+            --z-popover: 1400;
+            --z-tooltip: 1500;
+            
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            --gradient-text: linear-gradient(135deg, var(--text) 0%, var(--secondary) 100%);
+            --gradient-bg: linear-gradient(135deg, rgba(0, 112, 243, 0.1) 0%, rgba(138, 63, 252, 0.1) 100%);
+        }
+
+        /* Base CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image:   
+                radial-gradient(circle at 25% 10%, rgba(0, 112, 243, 0.12) 0%, transparent 30%),  
+                radial-gradient(circle at 75% 75%, rgba(138, 63, 252, 0.1) 0%, transparent 30%);  
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: var(--space-4);
+        }
+
+        h1 {
+            font-size: var(--font-size-4xl);
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            font-size: var(--font-size-3xl);
+            margin-bottom: var(--space-6);
+            color: var(--text);
+        }
+
+        h3 {
+            font-size: var(--font-size-xl);
+            color: var(--secondary);
+        }
+
+        p {
+            margin-bottom: var(--space-5);
+            font-size: var(--font-size-md);
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color var(--transition-normal);
+        }
+
+        a:hover {
+            color: var(--secondary);
+        }
+
+        ul, ol {
+            list-style-position: inside;
+            margin-bottom: var(--space-5);
+        }
+
+        /* Form elements */
+        input, textarea, select, button {
+            font-family: var(--font-main);
+            font-size: var(--font-size-base);
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Accessibility */
+        :focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        :focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        /* Hide content visually but keep for screen readers */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Error state */
+        .error-message {
+            color: var(--error);
+            padding: var(--space-4);
+            text-align: center;
+            border: 1px solid var(--error);
+            border-radius: var(--border-radius-md);
+            margin: var(--space-4) 0;
+        }
+
+        /* Layout CSS */
+        /* Main layout containers */
+        .container {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            width: 100%;
+        }
+
+        section {
+            padding: var(--space-12) 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        main {
+            min-height: 100vh;
+        }
+
+        /* Grid system */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -1rem;
+        }
+
+        .col {
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        /* Specific width columns */
+        .col-half {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 1rem;
+        }
+
+        .col-third {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+            padding: 0 1rem;
+        }
+
+        .col-two-thirds {
+            flex: 0 0 66.666667%;
+            max-width: 66.666667%;
+            padding: 0 1rem;
+        }
+
+        .col-quarter {
+            flex: 0 0 25%;
+            max-width: 25%;
+            padding: 0 1rem;
+        }
+
+        /* Flex utilities */
+        .flex {
+            display: flex;
+        }
+
+        .flex-column {
+            flex-direction: column;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .justify-start {
+            justify-content: flex-start;
+        }
+
+        .justify-end {
+            justify-content: flex-end;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .justify-around {
+            justify-content: space-around;
+        }
+
+        .align-start {
+            align-items: flex-start;
+        }
+
+        .align-end {
+            align-items: flex-end;
+        }
+
+        .align-center {
+            align-items: center;
+        }
+
+        .align-stretch {
+            align-items: stretch;
+        }
+
+        /* Grid system */
+        .grid {
+            display: grid;
+            gap: var(--space-5);
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .grid-auto-fit {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* Section colors */
+        .bg-dark {
+            background-color: var(--dark);
+        }
+
+        .bg-darker {
+            background-color: var(--darker);
+        }
+
+        .bg-gradient {
+            background: var(--gradient-bg);
+        }
+
+        /* Spacing utilities */
+        .mt-1 { margin-top: var(--space-1); }
+        .mt-2 { margin-top: var(--space-2); }
+        .mt-4 { margin-top: var(--space-4); }
+        .mt-6 { margin-top: var(--space-6); }
+        .mt-8 { margin-top: var(--space-8); }
+
+        .mb-1 { margin-bottom: var(--space-1); }
+        .mb-2 { margin-bottom: var(--space-2); }
+        .mb-4 { margin-bottom: var(--space-4); }
+        .mb-6 { margin-bottom: var(--space-6); }
+        .mb-8 { margin-bottom: var(--space-8); }
+
+        .mx-auto { 
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .py-4 { 
+            padding-top: var(--space-4);
+            padding-bottom: var(--space-4);
+        }
+
+        .py-6 { 
+            padding-top: var(--space-6);
+            padding-bottom: var(--space-6);
+        }
+
+        .py-8 { 
+            padding-top: var(--space-8);
+            padding-bottom: var(--space-8);
+        }
+
+        .px-4 {
+            padding-left: var(--space-4);
+            padding-right: var(--space-4);
+        }
+
+        /* Text alignment */
+        .text-center {
+            text-align: center;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        /* Section header */
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-10);
+        }
+
+        .section-header p {
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--text-secondary);
+        }
+
+        /* Fixed width containers */
+        .narrow-container {
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .medium-container {
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Components CSS */
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: var(--z-fixed);
+            backdrop-filter: blur(10px);
+            background: rgba(2, 8, 18, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all var(--transition-normal);
+        }
+
+        header.scrolled {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            padding: 0 var(--space-6);
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .logo-icon {
+            margin-right: 10px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon::before {
+            content: '';
+            width: 15px;
+            height: 15px;
+            background: var(--darker);
+            border-radius: 50%;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: var(--space-6);
+            margin-bottom: 0;
+            align-items: center; /* Add this to vertically center items */
+            height: 100%; /* Ensure the ul takes full height of the nav */
+        }
+
+        nav li {
+            display: flex; /* Add this to ensure li items can be aligned */
+            align-items: center; /* Vertically center content inside li */
+            height: 100%; /* Make list items take full height */
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--transition-normal);
+            position: relative;
+            padding: var(--space-2) 0;
+            display: flex; /* Add this to allow vertical centering */
+            align-items: center; /* Vertically center the text */
+        }
+
+        /* Adjust button within navigation to maintain alignment */
+        nav .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3) var(--space-5);
+        }
+
+        /* Mobile navigation toggle */
+        .mobile-toggle {
+            display: none;
+            font-size: var(--font-size-xl);
+            color: var(--text);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: var(--space-3) var(--space-5);
+            border-radius: var(--border-radius-xl);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 112, 243, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 112, 243, 0.4);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 112, 243, 0.1);
+            color: var(--text);
+        }
+
+        .btn-lg {
+            padding: var(--space-4) var(--space-6);
+            font-size: var(--font-size-md);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: var(--space-4);
+            flex-wrap: wrap;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden; /* Ensure overflow is hidden to prevent content spillage */
+        }
+
+        .hero-content {
+            max-width: 600px;
+            position: relative;
+            z-index: var(--z-default);
+        }
+
+        .hero-tagline {
+            font-family: var(--font-mono);
+            color: var(--secondary);
+            margin-bottom: var(--space-4);
+            display: inline-block;
+            padding: var(--space-2) var(--space-4);
+            background: rgba(0, 200, 255, 0.1);
+            border-radius: 20px;
+            font-size: var(--font-size-sm);
+        }
+
+        .hero-visual {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 45%;
+            height: 500px;
+            z-index: var(--z-negative);
+        }
+
+        /* Feature Cards */
+        .feature-card {
+            background: rgba(5, 14, 26, 0.5);
+            border-radius: var(--border-radius-lg);
+            padding: var(--space-6);
+            transition: all var(--transition-normal);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            z-index: var(--z-default);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-bg);
+            z-index: var(--z-negative);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            border-color: rgba(0, 200, 255, 0.2);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-5);
+            color: white;
+            font-size: var(--font-size-xl);
+        }
+
+        .feature-card h3 {
+            margin-top: 0;
+            font-size: var(--font-size-xl);
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        /* Process Steps */
+        .step {
+            display: flex;
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+            position: relative;
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            font-size: var(--font-size-4xl);
+            font-weight: 800;
+            line-height: 1;
+            color: var(--primary);
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 112, 243, 0.1);
+            border-radius: 50%;
+        }
+
+        .step-content h3 {
+            margin-top: 0;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+        }
+
+        .step-connector {
+            position: absolute;
+            top: 60px;
+            left: 30px;
+            width: 2px;
+            height: calc(100% - 30px);
+            background: linear-gradient(to bottom, var(--primary) 0%, transparent 100%);
+        }
+
+        /* Dashboard Mockup */
+        .dashboard-mockup {
+            background: rgba(5, 14, 26, 0.8);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: var(--space-5);
+            margin: var(--space-8) 0;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .mockup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: var(--space-4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mockup-title {
+            font-family: var(--font-mono);
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+        }
+
+        .mockup-controls {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .control-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .control-dot:nth-child(1) {
+            background: #ff5f57;
+        }
+
+        .control-dot:nth-child(2) {
+            background: #febc2e;
+        }
+
+        .control-dot:nth-child(3) {
+            background: #28c840;
+        }
+
+        .mockup-content {
+            padding: var(--space-4) 0;
+        }
+
+        .mockup-data {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+            margin-bottom: var(--space-4);
+        }
+
+        .data-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--border-radius-md);
+            padding: var(--space-4);
+        }
+
+        .data-label {
+            font-size: var(--font-size-xs);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-2);
+        }
+
+        .data-value {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .data-change {
+            font-size: var(--font-size-xs);
+            color: var(--success);
+            margin-top: var(--space-2);
+        }
+
+        .mockup-chart {
+            height: 200px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--border-radius-md);
+            margin: var(--space-4) 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(180deg, rgba(0, 200, 255, 0.2) 0%, rgba(0, 112, 243, 0) 100%);
+            clip-path: polygon(0% 100%, 5% 80%, 10% 85%, 15% 75%, 20% 80%, 25% 70%, 30% 75%, 35% 65%, 40% 70%, 45% 60%, 50% 65%, 55% 55%, 60% 60%, 65% 50%, 70% 55%, 75% 45%, 80% 50%, 85% 40%, 90% 45%, 95% 35%, 100% 40%, 100% 100%);
+        }
+
+        .chart-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            clip-path: polygon(0% 0%, 5% 80%, 10% 85%, 15% 75%, 20% 80%, 25% 70%, 30% 75%, 35% 65%, 40% 70%, 45% 60%, 50% 65%, 55% 55%, 60% 60%, 65% 50%, 70% 55%, 75% 45%, 80% 50%, 85% 40%, 90% 45%, 95% 35%, 100% 40%);
+        }
+
+        /* Ecosystem Logos */
+        .ecosystem-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-8);
+            margin-top: var(--space-8);
+        }
+
+        .logo-item {
+            opacity: 0.6;
+            transition: all var(--transition-normal);
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-item:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .logo-item span {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--text);
+            position: relative;
+        }
+
+        .logo-item span::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-secondary);
+        }
+
+        /* Code Card */
+        .code-card {
+            background: rgba(2, 8, 18, 0.9);
+            border-radius: var(--border-radius-md);
+            padding: var(--space-5);
+            font-family: var(--font-mono);
+            font-size: var(--font-size-sm);
+            margin: var(--space-6) 0;
+            border: 1px solid rgba(0, 112, 243, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-secondary);
+        }
+
+        .code-comment {
+            color: #63718b;
+        }
+
+        .code-function {
+            color: var(--secondary);
+        }
+
+        .code-keyword {
+            color: #c678dd;
+        }
+
+        .code-string {
+            color: #98c379;
+        }
+
+        .code-number {
+            color: #d19a66;
+        }
+
+        /* CTA Section */
+        .cta-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cta-content {
+            max-width: 500px;
+        }
+
+        .cta-visual {
+            width: 300px;
+            height: 300px;
+            position: relative;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--darker);
+            padding: var(--space-8) 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-8);
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: var(--space-4);
+        }
+
+        .footer-logo span {
+            color: var(--secondary);
+        }
+
+        .footer-about p {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-4);
+        }
+
+        .footer-links h4 {
+            font-size: var(--font-size-md);
+            margin-bottom: var(--space-5);
+            color: var(--text);
+        }
+
+        .footer-links ul {
+            list-style: none;
+            margin-bottom: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: var(--space-3);
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color var(--transition-normal);
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: var(--space-4);
+            margin-top: var(--space-5);
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: all var(--transition-normal);
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            margin-top: var(--space-8);
+            padding-top: var(--space-5);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+        }
+
+        /* Animations CSS */
+        /* Canvas for liquid animations */
+        #liquidCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: var(--z-negative);
+            pointer-events: none; /* Ensure the canvas doesn't interfere with clicks */
+        }
+        
+        /* Floating Elements Animation */
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(0, 200, 255, 0.5) 0%, rgba(0, 112, 243, 0) 70%);
+            animation: float 10s infinite ease-in-out;
+            z-index: var(--z-negative);
+            opacity: 0.2;
+            pointer-events: none; /* Ensure circles don't interfere with clicks */
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(10px, 15px);
+            }
+            50% {
+                transform: translate(-5px, 10px);
+            }
+            75% {
+                transform: translate(-10px, -5px);
+            }
+        }
+
+        /* Token Glow Effect */
+        .token-glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(0, 112, 243, 0.2) 0%, rgba(0, 200, 255, 0) 70%);
+            animation: pulse 4s infinite ease-in-out;
+            z-index: var(--z-negative);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        /* Liquid Drops Animation */
+        .liquid-drop {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, var(--secondary) 0%, var(--primary) 100%);
+            filter: blur(5px);
+            opacity: 0;
+            animation: dropFall 5s infinite ease-in;
+            pointer-events: none; /* Ensure drops don't interfere with clicks */
+        }
+
+        @keyframes dropFall {
+            0% {
+                transform: translateY(-50px) scale(0.3);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100%) scale(1); /* Changed from 120vh to 100% */
+                opacity: 0;
+            }
+        }
+
+        /* Water ripple effect */
+        .ripple-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: var(--z-negative);
+        }
+
+        .ripple {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            transform: scale(0);
+            opacity: 0.7;
+            animation: ripple 3s linear infinite;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(20);
+                opacity: 0;
+            }
+        }
+
+        /* Fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered fade-in for multiple elements */
+        .stagger-fade-in > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .stagger-fade-in > *.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-fade-in > *:nth-child(2) {
+            transition-delay: 0.1s;
+        }
+
+        .stagger-fade-in > *:nth-child(3) {
+            transition-delay: 0.2s;
+        }
+
+        .stagger-fade-in > *:nth-child(4) {
+            transition-delay: 0.3s;
+        }
+
+        .stagger-fade-in > *:nth-child(5) {
+            transition-delay: 0.4s;
+        }
+
+        .stagger-fade-in > *:nth-child(6) {
+            transition-delay: 0.5s;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            position: relative;
+            width: 64px;
+            height: 64px;
+        }
+
+        .loading div {
+            position: absolute;
+            background: var(--primary);
+            opacity: 1;
+            border-radius: 50%;
+            animation: loading 1.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+        }
+
+        .loading div:nth-child(2) {
+            animation-delay: -0.7s;
+        }
+
+        @keyframes loading {
+            0% {
+                top: 28px;
+                left: 28px;
+                width: 0;
+                height: 0;
+                opacity: 1;
+            }
+            100% {
+                top: -1px;
+                left: -1px;
+                width: 58px;
+                height: 58px;
+                opacity: 0;
+            }
+        }
+
+        /* Button hover animation */
+        .btn-hover-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-hover-effect::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%, -50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn-hover-effect:hover::after {
+            animation: ripple-btn 1s ease-out;
+        }
+
+        @keyframes ripple-btn {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 0;
+                transform: scale(40, 40);
+            }
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 0.15em solid var(--secondary);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 0.05em;
+            animation: 
+                typing 3.5s steps(40, end),
+                blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--secondary) }
+        }
+
+        /* Responsive CSS */
+        /* Large Desktops */
+        @media (max-width: 1400px) {
+            .container {
+                max-width: 1140px;
+            }
+        }
+
+        /* Desktops */
+        @media (max-width: 1200px) {
+            .container {
+                max-width: 960px;
+            }
+            
+            h1 {
+                font-size: var(--font-size-3xl);
+            }
+            
+            h2 {
+                font-size: var(--font-size-2xl);
+            }
+            
+            .hero-visual {
+                width: 40%;
+            }
+            
+            .cta-container {
+                padding: 0 var(--space-4);
+            }
+        }
+
+        /* Tablets */
+        @media (max-width: 992px) {
+            .container {
+                max-width: 720px;
+            }
+            
+            h1 {
+                font-size: var(--font-size-2xl);
+            }
+            
+            h2 {
+                font-size: var(--font-size-xl);
+            }
+            
+            .header-container {
+                height: 70px;
+            }
+            
+            nav ul {
+                gap: var(--space-4);
+            }
+            
+            .cta-container {
+                flex-direction: column;
+                text-align: center;
+                gap: var(--space-6);
+            }
+            
+            .cta-visual {
+                order: -1;
+            }
+            
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            /* Column system adjustment */
+            .col-third, .col-quarter {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+        /* Mobile Landscape */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 540px;
+            }
+            
+            h1 {
+                font-size: var(--font-size-xl);
+            }
+            
+            h2 {
+                font-size: var(--font-size-lg);
+                margin-bottom: var(--space-4);
+            }
+            
+            .hero-visual {
+                display: none;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+                text-align: center;
+            }
+            
+            .btn-group {
+                justify-content: center;
+            }
+            
+            .step {
+                flex-direction: column;
+                gap: var(--space-4);
+            }
+            
+            .step-connector {
+                display: none;
+            }
+            
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            section {
+                padding: var(--space-8) 0;
+            }
+            
+            .section-header {
+                margin-bottom: var(--space-6);
+            }
+            
+            /* Column system for mobile */
+            .col, .col-half, .col-third, .col-quarter, .col-two-thirds {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            
+            /* Mobile navigation */
+            .mobile-toggle {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: var(--darker);
+                padding: var(--space-4);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: transform 0.3s ease, opacity 0.3s ease;
+                z-index: var(--z-dropdown);
+            }
+            
+            nav.open {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: var(--space-4);
+            }
+            
+            nav li {
+                width: 100%;
+            }
+            
+            nav a {
+                display: block;
+                padding: var(--space-2);
+            }
+            
+            .ecosystem-logos {
+                gap: var(--space-4);
+            }
+            
+            .logo-item {
+                height: 40px;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .footer-logo, .social-links {
+                justify-content: center;
+            }
+        }
+
+        /* Mobile Portrait */
+        @media (max-width: 576px) {
+            .container {
+                max-width: 100%;
+                padding: 0 var(--space-4);
+            }
+            
+            h1 {
+                font-size: var(--font-size-lg);
+            }
+            
+            .hero-tagline {
+                font-size: var(--font-size-xs);
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: var(--space-2);
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .mockup-data {
+                grid-template-columns: 1fr;
+            }
+            
+            .ecosystem-logos {
+                flex-direction: column;
+                gap: var(--space-6);
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .container {
+                max-width: 100%;
+                width: 100%;
+            }
+            
+            header, footer, .btn, #liquidCanvas, .floating-circle, .token-glow, .ripple-container {
+                display: none;
+            }
+            
+            h1, h2, h3, h4, h5, h6 {
+                color: black;
+                page-break-after: avoid;
+            }
+            
+            p, blockquote, ul, ol, dl, table {
+                page-break-inside: avoid;
+            }
+            
+            img {
+                max-width: 100% !important;
+            }
+            
+            @page {
+                margin: 2cm;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Import Header -->
-    <div id="header-container"></div>
-    
-    <!-- Import Main Content -->
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">
+                <div class="logo-icon"></div>
+                Liquid<span>ao</span>
+            </a>
+            <button class="mobile-toggle" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#ecosystems">Ecosystems</a></li>
+                    <li><a href="#" class="btn btn-primary">Launch App</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
     <main>
-        <div id="hero-container"></div>
-        <div id="features-container"></div>
-        <div id="how-it-works-container"></div>
-        <div id="ecosystems-container"></div>
-        <div id="cta-container"></div>
+        <!-- Hero Section -->
+        <section class="hero">
+            <canvas id="liquidCanvas" aria-hidden="true"></canvas>
+            <div class="container">
+                <div class="hero-content fade-in">
+                    <span class="hero-tagline">Unlock Liquidity For vNFTs</span>
+                    <h1>Unlock the Power of Your Time-Locked DeFi Assets</h1>
+                    <p>LiquidVest creates a circular economy that benefits both vNFT holders seeking liquidity and traders seeking flexible exposure while maintaining governance rewards.</p>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-primary btn-lg btn-hover-effect">Earn Now</a>
+                        <a href="#how-it-works" class="btn btn-secondary btn-lg">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <!-- Liquid animations will be rendered here by JavaScript -->
+                </div>
+            </div>
+            <div class="floating-circle" style="width: 300px; height: 300px; top: 20%; left: 10%; animation-duration: 15s;"></div>
+            <div class="floating-circle" style="width: 200px; height: 200px; top: 60%; right: 5%; animation-duration: 12s; animation-delay: 2s;"></div>
+            <div class="token-glow" style="top: 30%; right: 15%;"></div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features bg-dark" id="features">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <h2>Innovative DeFi Liquidity Solutions</h2>
+                    <p>Liquidao solves the fundamental tension between locking for rewards and maintaining liquidity</p>
+                </div>
+                <div class="grid grid-auto-fit stagger-fade-in">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-lock-open"></i></div>
+                        <h3>Immediate Liquidity</h3>
+                        <p>Transform your time-locked vNFTs into liquid assets instantly, without sacrificing rewards or governance rights.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                        <h3>Enhanced Yield</h3>
+                        <p>Benefit from the accumulated governance rewards while maintaining trading flexibility and market exposure.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-exchange-alt"></i></div>
+                        <h3>Flexible Trading</h3>
+                        <p>Enter and exit positions without being constrained by vesting periods, improving capital efficiency in DeFi markets.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-vote-yea"></i></div>
+                        <h3>Governance Rights</h3>
+                        <p>Maintain access to governance voting power through our community pool, ensuring your voice is still heard.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-sync-alt"></i></div>
+                        <h3>Circular Economy</h3>
+                        <p>Our self-sustaining model creates aligned incentives for all participants while maintaining ecosystem stability.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-plug"></i></div>
+                        <h3>Multi-Protocol Support</h3>
+                        <p>Compatible with all Solidly-based protocols including Thena, Aerodrome, Curve, Pendle and other Solidly forks.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="floating-circle" style="width: 150px; height: 150px; bottom: 10%; left: 20%; animation-duration: 10s;"></div>
+            <div class="floating-circle" style="width: 100px; height: 100px; top: 20%; right: 15%; animation-duration: 8s; animation-delay: 1s;"></div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <h2>How Liquidao Works</h2>
+                    <p>Our innovative protocol creates liquidity through a simple, user-friendly process</p>
+                </div>
+                <div class="narrow-container stagger-fade-in">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-connector"></div>
+                        <div class="step-content">
+                            <h3>Deposit Your vNFT</h3>
+                            <p>Connect your wallet and deposit your time-locked vesting NFT (such as veTHENA) into the Liquidao platform.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-connector"></div>
+                        <div class="step-content">
+                            <h3>Receive Liquid Tokens</h3>
+                            <p>Instantly receive liquid wrapper tokens (e.g., liVeTHENA) representing your underlying tokens, minus a small premium based on remaining lock time.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-connector"></div>
+                        <div class="step-content">
+                            <h3>Trade or Stake</h3>
+                            <p>Use your liquid tokens freely in the DeFi ecosystem - trade them on DEXs or stake them to earn a share of voting rewards.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Claim Rewards</h3>
+                            <p>Stake your liquid tokens to receive voting rewards generated by the community vNFT pool, distributed automatically to all stakers.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-mockup fade-in">
+                    <div class="mockup-header">
+                        <div class="mockup-title">Liquidao Dashboard</div>
+                        <div class="mockup-controls">
+                            <div class="control-dot"></div>
+                            <div class="control-dot"></div>
+                            <div class="control-dot"></div>
+                        </div>
+                    </div>
+                    <div class="mockup-content">
+                        <div class="mockup-data">
+                            <div class="data-card">
+                                <div class="data-label">Total Locked Value</div>
+                                <div class="data-value">$12.4M</div>
+                                <div class="data-change">+5.2% this week</div>
+                            </div>
+                            <div class="data-card">
+                                <div class="data-label">Avg. Liquidity Premium</div>
+                                <div class="data-value">4.8%</div>
+                                <div class="data-change">-0.3% this week</div>
+                            </div>
+                            <div class="data-card">
+                                <div class="data-label">Active vNFTs</div>
+                                <div class="data-value">892</div>
+                                <div class="data-change">+21 this week</div>
+                            </div>
+                        </div>
+                        <div class="mockup-chart">
+                            <div class="chart-line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="floating-circle" style="width: 200px; height: 200px; bottom: 30%; right: 10%; animation-duration: 12s;"></div>
+            <div class="token-glow" style="bottom: 20%; left: 15%;"></div>
+        </section>
+
+        <!-- Ecosystems Section -->
+        <section class="ecosystems bg-dark" id="ecosystems">
+            <div class="container">
+                <div class="section-header fade-in">
+                    <h2>Compatible Ecosystems</h2>
+                    <p>Liquidao works seamlessly with all Solidly-based protocols</p>
+                </div>
+                <div class="ecosystem-logos stagger-fade-in">
+                    <div class="logo-item"><span>THENA</span></div>
+                    <div class="logo-item"><span>AERODROME</span></div>
+                    <div class="logo-item"><span>CURVE</span></div>
+                    <div class="logo-item"><span>PENDLE</span></div>
+                    <div class="logo-item"><span>VELODROME</span></div>
+                </div>
+                
+                <div class="code-card fade-in">
+                    <div class="code-comment">// Example of liquidifying a vNFT</div>
+                    <div class="code-function">async function</div> <span class="code-keyword">liquidifyVNFT</span>(vNFT, account) {
+                    <br>&nbsp;&nbsp;<span class="code-comment">// Approve the vNFT for transfer</span>
+                    <br>&nbsp;&nbsp;<span class="code-keyword">await</span> vNFT.approve(LIQUIDAO_ADDRESS, tokenId);
+                    <br>
+                    <br>&nbsp;&nbsp;<span class="code-comment">// Calculate the premium based on lock time</span>
+                    <br>&nbsp;&nbsp;<span class="code-keyword">const</span> lockTimeRemaining = <span class="code-keyword">await</span> vNFT.getLockTimeRemaining(tokenId);
+                    <br>&nbsp;&nbsp;<span class="code-keyword">const</span> premium = calculatePremium(lockTimeRemaining);
+                    <br>
+                    <br>&nbsp;&nbsp;<span class="code-comment">// Deposit the vNFT and receive liquid tokens</span>
+                    <br>&nbsp;&nbsp;<span class="code-keyword">const</span> liquidTokens = <span class="code-keyword">await</span> Liquidao.deposit(tokenId, premium);
+                    <br>&nbsp;&nbsp;<span class="code-function">return</span> liquidTokens;
+                    <br>}
+                </div>
+            </div>
+            <div class="floating-circle" style="width: 120px; height: 120px; top: 30%; left: 15%; animation-duration: 9s;"></div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta bg-gradient">
+            <div class="container">
+                <div class="cta-container fade-in">
+                    <div class="cta-content">
+                        <h2>Ready to Unlock Your Liquidity?</h2>
+                        <p>Join the Liquidao protocol and transform your time-locked DeFi assets into liquid capital while maintaining governance rights and rewards.</p>
+                        <a href="#" class="btn btn-primary btn-lg btn-hover-effect">Launch App</a>
+                    </div>
+                    <div class="cta-visual">
+                        <div class="token-glow" style="width: 250px; height: 250px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ripple-container">
+                <div class="ripple" style="bottom: 10%; left: 20%;"></div>
+                <div class="ripple" style="bottom: 30%; left: 60%; animation-delay: 1s;"></div>
+                <div class="ripple" style="bottom: 20%; left: 80%; animation-delay: 2s;"></div>
+            </div>
+        </section>
     </main>
-    
-    <!-- Import Footer -->
-    <div id="footer-container"></div>
-    
-    <!-- JavaScript Imports -->
-    <script src="js/main.js"></script>
-    <script src="js/animations.js"></script>
-    <script src="js/modules-loader.js"></script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <div class="logo-icon"></div>
+                        Liquid<span>Vest</span>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Protocol</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Whitepaper</a></li>
+                        <li><a href="#">Governance</a></li>
+                        <li><a href="#">Audits</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#">Forum</a></li>
+                        <li><a href="#">Discord</a></li>
+                        <li><a href="#">Twitter</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Partners</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Liquidao Protocol. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        /**
+         * Main JavaScript for LiquidVest Landing Page
+         * Contains primary interactive functionality
+         */
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAll();
+            
+            // Header scroll effect
+            function initializeHeader() {
+                const header = document.querySelector('header');
+                const mobileToggle = document.querySelector('.mobile-toggle');
+                const nav = document.querySelector('nav');
+                
+                if (header) {
+                    window.addEventListener('scroll', function() {
+                        if (window.scrollY > 50) {
+                            header.classList.add('scrolled');
+                        } else {
+                            header.classList.remove('scrolled');
+                        }
+                    });
+                }
+                
+                // Mobile menu toggle
+                if (mobileToggle && nav) {
+                    mobileToggle.addEventListener('click', function() {
+                        nav.classList.toggle('open');
+                        mobileToggle.setAttribute('aria-expanded', 
+                            nav.classList.contains('open') ? 'true' : 'false');
+                    });
+                }
+            }
+            
+            // Initialize fade-in animations
+            function initializeFadeInElements() {
+                const fadeElements = document.querySelectorAll('.fade-in');
+                
+                if (fadeElements.length > 0) {
+                    // Create IntersectionObserver
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+                                // Unobserve element after it's visible
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    
+                    // Observe each element
+                    fadeElements.forEach(element => {
+                        observer.observe(element);
+                    });
+                }
+            }
+            
+            // Initialize staggered fade-in animations
+            function initializeStaggeredFadeIn() {
+                const staggerContainers = document.querySelectorAll('.stagger-fade-in');
+                
+                if (staggerContainers.length > 0) {
+                    // Create IntersectionObserver
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                // Add visible class to each child with a delay
+                                const children = entry.target.children;
+                                Array.from(children).forEach((child, index) => {
+                                    setTimeout(() => {
+                                        child.classList.add('visible');
+                                    }, index * 100);
+                                });
+                                // Unobserve container after children are visible
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    
+                    // Observe each container
+                    staggerContainers.forEach(container => {
+                        observer.observe(container);
+                    });
+                }
+            }
+            
+            // Smooth scroll for anchor links
+            function initializeSmoothScroll() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        const targetId = this.getAttribute('href');
+                        if (targetId === '#') return;
+                        
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            const headerOffset = 80;
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                            
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: 'smooth'
+                            });
+                            
+                            // Close mobile menu if open
+                            const nav = document.querySelector('nav');
+                            if (nav && nav.classList.contains('open')) {
+                                nav.classList.remove('open');
+                                document.querySelector('.mobile-toggle').setAttribute('aria-expanded', 'false');
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Initialize liquid drops animation
+            function initializeLiquidDrops() {
+                // Find the hero section to contain drops
+                const heroSection = document.querySelector('.hero');
+                if (!heroSection) return;
+                
+                function addRandomDrops() {
+                    const numDrops = Math.floor(Math.random() * 3) + 1;
+                    
+                    for (let i = 0; i < numDrops; i++) {
+                        const drop = document.createElement('div');
+                        drop.classList.add('liquid-drop');
+                        
+                        // Random position within the hero section
+                        const posX = Math.random() * 80 + 10; // 10% to 90% of section width
+                        drop.style.left = `${posX}%`;
+                        
+                        // Random delay
+                        const delay = Math.random() * 2;
+                        drop.style.animationDelay = `${delay}s`;
+                        
+                        // Append to hero section instead of body
+                        heroSection.appendChild(drop);
+                        
+                        // Remove after animation completes
+                        setTimeout(() => {
+                            if (heroSection.contains(drop)) {
+                                heroSection.removeChild(drop);
+                            }
+                        }, 5000);
+                    }
+                    
+                    // Schedule next drops
+                    setTimeout(addRandomDrops, Math.random() * 2000 + 1000);
+                }
+                
+                // Start liquid drops animation
+                addRandomDrops();
+            }
+            
+            // Initialize canvas animations
+            function initializeCanvasAnimations() {
+                // Get canvas element
+                const canvas = document.getElementById('liquidCanvas');
+                if (!canvas) return;
+                
+                const ctx = canvas.getContext('2d');
+                
+                // Set canvas dimensions to match the hero section
+                function resizeCanvas() {
+                    const heroSection = canvas.closest('.hero');
+                    if (heroSection) {
+                        canvas.width = heroSection.offsetWidth;
+                        canvas.height = heroSection.offsetHeight;
+                        
+                        // Force redraw all elements after resize to prevent visual glitches
+                        initParticles();
+                        initDrops();
+                    }
+                }
+                
+                // Liquid drops class
+                class Drop {
+                    constructor() {
+                        this.reset();
+                    }
+                    
+                    reset() {
+                        this.x = Math.random() * canvas.width;
+                        this.y = -50; // Start above the visible canvas
+                        this.size = Math.random() * 20 + 10;
+                        this.speed = Math.random() * 2 + 2;
+                        this.opacity = Math.random() * 0.7 + 0.3;
+                        this.hue = Math.random() * 40 + 200; // Blue to cyan range
+                    }
+                    
+                    update() {
+                        this.y += this.speed;
+                        this.opacity -= 0.002;
+                        
+                        // Reset if drop goes beyond canvas height or becomes invisible
+                        if (this.y > canvas.height || this.opacity <= 0) {
+                            this.reset();
+                        }
+                    }
+                    
+                    draw() {
+                        ctx.beginPath();
+                        // Create gradient for drop
+                        const gradient = ctx.createRadialGradient(
+                            this.x, this.y, 0,
+                            this.x, this.y, this.size
+                        );
+                        gradient.addColorStop(0, `hsla(${this.hue}, 100%, 70%, ${this.opacity})`);
+                        gradient.addColorStop(1, `hsla(${this.hue}, 100%, 50%, 0)`);
+                        
+                        ctx.fillStyle = gradient;
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                
+                // Create drops
+                let drops = [];
+                const dropCount = 20;
+                
+                function initDrops() {
+                    drops = [];
+                    for (let i = 0; i < dropCount; i++) {
+                        drops.push(new Drop());
+                    }
+                }
+                
+                // Floating particles class
+                class Particle {
+                    constructor() {
+                        this.reset();
+                    }
+                    
+                    reset() {
+                        // Ensure particles stay within the canvas bounds
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                        this.size = Math.random() * 3 + 1;
+                        this.speedX = (Math.random() - 0.5) * 0.5;
+                        this.speedY = (Math.random() - 0.5) * 0.5;
+                        this.opacity = Math.random() * 0.5 + 0.3;
+                        this.hue = Math.random() * 40 + 200; // Blue to cyan range
+                    }
+                    
+                    update() {
+                        this.x += this.speedX;
+                        this.y += this.speedY;
+                        
+                        // Keep particles within canvas boundaries by bouncing them off edges
+                        // instead of wrapping around
+                        if (this.x < 0 || this.x > canvas.width) {
+                            this.speedX *= -1; // Reverse direction
+                            this.x = Math.max(0, Math.min(this.x, canvas.width));
+                        }
+                        if (this.y < 0 || this.y > canvas.height) {
+                            this.speedY *= -1; // Reverse direction
+                            this.y = Math.max(0, Math.min(this.y, canvas.height));
+                        }
+                    }
+                    
+                    draw() {
+                        ctx.beginPath();
+                        ctx.fillStyle = `hsla(${this.hue}, 100%, 70%, ${this.opacity})`;
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                
+                // Create particles
+                let particles = [];
+                const particleCount = 150;
+                
+                function initParticles() {
+                    particles = [];
+                    for (let i = 0; i < particleCount; i++) {
+                        particles.push(new Particle());
+                    }
+                }
+                
+                // Draw water wave
+                function drawWave(time) {
+                    ctx.beginPath();
+                    
+                    const height = 50;
+                    const amplitude = 20;
+                    const frequency = 0.02;
+                    const y = canvas.height - height;
+                    
+                    ctx.moveTo(0, y + Math.sin(time * 0.001) * amplitude);
+                    
+                    for (let x = 0; x < canvas.width; x++) {
+                        const wave1 = Math.sin(x * frequency + time * 0.001) * amplitude;
+                        const wave2 = Math.sin(x * frequency * 2 + time * 0.002) * amplitude / 2;
+                        ctx.lineTo(x, y + wave1 + wave2);
+                    }
+                    
+                    ctx.lineTo(canvas.width, canvas.height);
+                    ctx.lineTo(0, canvas.height);
+                    ctx.closePath();
+                    
+                    const gradient = ctx.createLinearGradient(0, y, 0, canvas.height);
+                    gradient.addColorStop(0, 'rgba(0, 112, 243, 0.2)');
+                    gradient.addColorStop(1, 'rgba(0, 200, 255, 0.05)');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                }
+                
+                // Set initial size
+                resizeCanvas();
+                
+                // Create initial particles and drops
+                initParticles();
+                initDrops();
+                
+                // Listen for window resize
+                window.addEventListener('resize', resizeCanvas);
+                
+                // Animation loop
+                function animate() {
+                    // Clear canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Draw particles
+                    particles.forEach(particle => {
+                        particle.update();
+                        particle.draw();
+                    });
+                    
+                    // Draw drops
+                    drops.forEach(drop => {
+                        drop.update();
+                        drop.draw();
+                    });
+                    
+                    // Draw wave
+                    drawWave(performance.now());
+                    
+                    // Continue animation loop
+                    requestAnimationFrame(animate);
+                }
+                
+                // Start animation
+                animate();
+                console.log('Canvas animations initialized');
+            }
+            
+            // Initialize all page functionality
+            function initializeAll() {
+                initializeHeader();
+                initializeFadeInElements();
+                initializeStaggeredFadeIn();
+                initializeSmoothScroll();
+                initializeLiquidDrops();
+                initializeCanvasAnimations();
+                
+                console.log('LiquidVest landing page initialized');
+            }
+        });
+    </script>
 </body>
 </html>
